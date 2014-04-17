@@ -3,9 +3,9 @@ public class Hopscotch {
 	public static void main(String []arg){
 
 		for(int i = 1; i < 122; i++){
-			if(rule3(i) == true){
+			if(rule2(i) == true){
 				System.out.print(i + " = ");
-				System.out.println(useRule3(i));
+				System.out.println(useRule2(i));
 			}
 		}
 	}
@@ -35,8 +35,11 @@ public class Hopscotch {
 		return false;
 	}
 	
+	/*
+	 * Return the number minus its "digits" value.
+	 */
 	static int useRule2(int num){
-		return num - 4;
+		return num - (num % 10);
 	}
 	
 	/*
@@ -59,7 +62,7 @@ public class Hopscotch {
 		for(int i = 0 ; i < numStr.length(); i++){
 			sum += Integer.parseInt(numStr.substring(i, i+1));
 		}
-		return sum;
+		return num - sum;
 	}
 	
 	/*
