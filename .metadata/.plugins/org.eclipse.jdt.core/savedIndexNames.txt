@@ -1,0 +1,1 @@
+INDEX VERSION 1.126+C:\Users\ckova_000\SkyDrive\Books and School\School\Java\workspace\.metadata\.plugins\org.eclipse.jdt.core
