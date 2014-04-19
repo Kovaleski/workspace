@@ -1,15 +1,111 @@
+import java.math.*;
 
 public class Hopscotch {
+	public static int score = 0;
+	
 	public static void main(String []arg){
-
-		for(int i = 1; i < 122; i++){
-			if(rule2(i) == true){
-				System.out.print(i + " = ");
-				System.out.println(useRule2(i));
-			}
-		}
+		int n = 7;
+			System.out.println("Game starting for n = " + n);
+			System.out.println("Score: " + iterative(n));
+			score = 0;		
 	}
 	
+	/*
+	 * Bottom up method using DP, checks all the possible
+	 * solutions and stored the previously solved values into
+	 * an int array.
+	 */
+	static int iterative(int num){
+		int f[] = new int[num + 1];
+		int i = 1;
+		f[0] = 0;
+		f[1] = 1;
+		
+		for(i = 1; i <= num; i++){
+			if(rule2(i) == true)
+				f[i] = Math.min(
+						f[i - useRule2(i)] + 3,
+						f[i - 1] + 1);
+			else if(rule3(i) == true)
+				f[i] = Math.min(
+						f[i - useRule3(i)] + 4,
+						f[i - 1] + 1);
+			else if(rule4(i) == true)
+				f[i] = Math.min(
+						f[i - 4] + 2,
+						f[i - 1] + 1);
+			else{
+				f[i] = f[i-1] + 1;
+			}
+		}
+		
+		return f[num];
+	}
+	
+	static int min(int a, int b, int c, int d){
+		if( a <= b && a <= c && a <= d)
+			return a;
+		if( b <= a && b <= c && b <= d)
+			return b;
+		if( c <= a && c <= b && a <= d)
+			return c;
+		if( d <= b && d <= c && d <= a)
+			return d;
+		
+		else
+			return a;
+	}
+	
+	
+/*
+ * Attempt at a recursive solution worked for all
+ * test cases under 50, did not add memoization
+ * due to me getting the bottom up method working first.
+ * This function is therefore useless and just for my records.	
+ */
+	static int recursive(int num){
+		if(rule2(num) == true)
+			System.out.print("@ ");
+		if(rule3(num) == true)
+			System.out.print("# ");
+		if(rule4(num) == true)
+			System.out.print("$ ");
+		System.out.print(num + ": ");
+		
+		if(num == 0)
+			return 0;
+		
+		// if the digits in rule 2 are less than 3
+		// your score would be smaller using 3 rule 1's
+		if(rule2(num) == true && useRule2(num) >= 3){
+			System.out.println("rule 2 score = " + (score+3));
+			score += 3;
+			return recursive(num - useRule2(num));
+		}
+		/*else if(rule3(num) == true && rule4(num) == true){
+			System.out.print("*");
+			
+			return recursive(num - max);
+		}*/
+		
+		else if(rule4(num) == true){
+			System.out.println("rule 4 score = " + (score+2));
+			score += 2;
+			return recursive(num - useRule4(num));
+		}
+		
+		else if(rule3(num) == true && useRule3(num) >= 4){
+			System.out.println("rule 3 score = " + (score+4)
+					);
+			score += 4;
+			return recursive(num - useRule3(num));
+		}
+		else{
+			System.out.println("rule 1 score = " + (score+1));
+			score += 1;
+			return recursive(num - useRule1(num));
+		}
+	}
 	
 	/*
 	 * Rule 1 can always be used
@@ -19,7 +115,7 @@ public class Hopscotch {
 	}
 	
 	static int useRule1(int num){
-		return num - 1;
+		return 1;
 	}
 	
 	/*
@@ -39,7 +135,11 @@ public class Hopscotch {
 	 * Return the number minus its "digits" value.
 	 */
 	static int useRule2(int num){
-		return num - (num % 10);
+		if(rule2(num) == false)
+			// To help the min function, return a high
+			// value if we shouldn't use rule 2
+			return 99999;
+		return (num % 10);
 	}
 	
 	/*
@@ -56,13 +156,18 @@ public class Hopscotch {
 	 * Return the sum of the digits
 	 */
 	static int useRule3(int num){
+		if(rule3(num) == false)
+			// To help the min function, return a high
+			// value if we shouldn't use rule 3
+			return 99999;
+		
 		String numStr = Integer.toString(num);
 		int sum = 0;
 		// Parse string version of number and add the digits
 		for(int i = 0 ; i < numStr.length(); i++){
 			sum += Integer.parseInt(numStr.substring(i, i+1));
 		}
-		return num - sum;
+		return sum;
 	}
 	
 	/*
@@ -75,7 +180,11 @@ public class Hopscotch {
 	}
 	
 	static int useRule4(int num){
-		return num - 4;
+		if(rule4(num) == false)
+			// To help the min function, return a high
+			// value if we shouldn't use rule 4
+			return 99999;
+		return 4;
 	}
 	
 	/*
