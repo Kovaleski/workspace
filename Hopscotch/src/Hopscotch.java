@@ -1,13 +1,29 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.math.*;
+import java.util.Scanner;
 
 public class Hopscotch {
-	public static int score = 0;
 	
-	public static void main(String []arg){
-		int n = 7;
-			System.out.println("Game starting for n = " + n);
-			System.out.println("Score: " + iterative(n));
-			score = 0;		
+	public static void main(String []arg) throws FileNotFoundException, UnsupportedEncodingException{
+		new Hopscotch();
+	}
+	
+	Hopscotch() throws FileNotFoundException, UnsupportedEncodingException{
+		Scanner inp = new Scanner(new File("hopscotch.in"));
+		//PrintWriter out = new PrintWriter("hopscotch.out", "UTF-8");
+
+		int cases = inp.nextInt();
+		for(int i = 0; i < cases; i++){
+			int number = inp.nextInt();
+			System.out.println("Game #" + (i+1) + ": "
+					+ iterative(number));
+			//out.println("Game #" + (i+1) + ": "
+			//		+ iterative(number));
+		}
+		inp.close();
 	}
 	
 	/*
@@ -19,13 +35,23 @@ public class Hopscotch {
 		int f[] = new int[num + 1];
 		int i = 1;
 		f[0] = 0;
-		f[1] = 1;
+		//f[1] = 1;
 		
 		for(i = 1; i <= num; i++){
 			if(rule2(i) == true)
 				f[i] = Math.min(
 						f[i - useRule2(i)] + 3,
 						f[i - 1] + 1);
+			else if(rule3(i) == true && rule4(i) == true){
+				int rule3 = Math.min(
+						f[i - useRule3(i)] + 4,
+						f[i - 1] + 1);
+				int rule4 = Math.min(
+						f[i - 4] + 2,
+						f[i - 1] + 1);
+				f[i] = Math.min(rule3, rule4);
+				
+			}
 			else if(rule3(i) == true)
 				f[i] = Math.min(
 						f[i - useRule3(i)] + 4,
@@ -63,6 +89,7 @@ public class Hopscotch {
  * due to me getting the bottom up method working first.
  * This function is therefore useless and just for my records.	
  */
+	/*
 	static int recursive(int num){
 		if(rule2(num) == true)
 			System.out.print("@ ");
@@ -82,12 +109,12 @@ public class Hopscotch {
 			score += 3;
 			return recursive(num - useRule2(num));
 		}
-		/*else if(rule3(num) == true && rule4(num) == true){
+		else if(rule3(num) == true && rule4(num) == true){
 			System.out.print("*");
 			
 			return recursive(num - max);
-		}*/
-		
+		}
+
 		else if(rule4(num) == true){
 			System.out.println("rule 4 score = " + (score+2));
 			score += 2;
@@ -105,7 +132,7 @@ public class Hopscotch {
 			score += 1;
 			return recursive(num - useRule1(num));
 		}
-	}
+	}*/
 	
 	/*
 	 * Rule 1 can always be used
