@@ -1,9 +1,15 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.math.*;
+import java.io.*;
 import java.util.Scanner;
+
+/**
+ * COP3503C Computer Science 2
+ * Hopscotch.java
+ * Purpose: Implement Dynamic Programming.
+ *
+ * @author Christopher Kovaleski
+ * @version 1.0 4/19/2014
+ */
+
 
 public class Hopscotch {
 	
@@ -24,6 +30,7 @@ public class Hopscotch {
 			//		+ iterative(number));
 		}
 		inp.close();
+		//out.close();
 	}
 	
 	/*
